@@ -1,0 +1,29 @@
+; Drowning Visuals 1.8 - Stentorious
+
+; Check for requirements
+if GetPluginVersion "lStewieAl's Tweaks" < 906
+	MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest lStewieAl's Tweaks."
+	return
+endif
+
+; On Game Restart
+if Goo1.AuxVarGetFlt "*DrownVisInit" != 1
+	
+	SetUIFloatAlt "HudMainMenu\MUX_Air\visible" 0 																							; Hide M.U.X. air if installed
+	SetUIFloatAlt "HudMainMenu\_DV+VS" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStrength" "DrowningVisuals.ini"))) * 255)	; Set Vignette strength
+	SetUIFloatAlt "HudMainMenu\_DV+VT" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStart" "DrowningVisuals.ini")))				; Set Vignette start threshold 
+	SetUIFloatAlt "HudMainMenu\_DV+BB" (GetGS fActorSwimBreathBase)																			; Set fActorSwimBreathBase
+	SetUIFloatAlt "HudMainMenu\_DV+BM" ((GetGS fActorSwimBreathMult) * 5)																	; Set fActorSwimBreathMult
+	SetUIFloatGradual "HudMainMenu\_DV+AR" 51 (GetUIFloatAlt "HudMainMenu\_DV+VS") 1 2														; Set red vignette alpha pulse
+	
+	SetOnMenuCloseEventHandler ({int stL1} => player.DamageActorValue Endurance 0) 1 1048													; Update breath amount on level up
+	SetOnMenuCloseEventHandler ({int stL1} => player.DamageActorValue Endurance 0) 1 1074													; Update breath amount on character creation
+	SetGameMainLoopCallback (begin Function {}
+		SetUIFloatAlt "HudMainMenu\_DV+PE" (player.GetAV Endurance)																			; Update Endurance
+		SetUIFloatAlt "HudMainMenu\_DV+PB" (player.GetActorDiveBreath)																		; Update Dive Breath						
+	end) 1 3 1
+	
+	Goo1.AuxVarSetFlt "*DrownVisInit" 1
+	
+endif
+

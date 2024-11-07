@@ -1,0 +1,50 @@
+<_DV+AR> 0 </_DV+AR>
+<_DV+VS> 255 </_DV+VS>
+<_DV+VT> 1 </_DV+VT>
+<_DV+BB> 10 </_DV+BB>
+<_DV+BM> 2.5 </_DV+BM>
+<_DV+PB> 10 </_DV+PB>
+<_DV+PE> 5 </_DV+PE>
+
+<rect name="DrowningVisuals">
+
+	<_threshold> 
+		<copy src="io()" trait="_DV+BB"/>
+		<add> <copy src="io()" trait="_DV+BM"/> <onlyif> <copy src="io()" trait="_DV+PE"/> <gt> 5 </gt> </onlyif> </add>
+		<add> <copy src="io()" trait="_DV+BM"/> <onlyif> <copy src="io()" trait="_DV+PE"/> <gt> 8 </gt> </onlyif> </add>
+		<mul> <copy src="io()" trait="_DV+VT"/> </mul>
+	</_threshold>
+
+	<image name="vignette">
+		<visible> <copy src="io()" trait="_DV+PB"/> <lt> <copy src="parent()" trait="_threshold"/> </lt> </visible>
+		<filename> Stentorious\Interface\vignette_drown.dds </filename>
+		<depth>-3</depth>
+		<width><copy src="screen()" trait="width"/><add>20</add></width>
+		<height><copy src="screen()" trait="height"/><add>20</add></height>
+		<zoom> &scale; </zoom>
+		<x>-10</x>
+		<y>-10</y>
+		<alpha>
+			<copy src="parent()" trait="_threshold"/>
+			<sub src="io()" trait="_DV+PB"/>
+			<div src="parent()" trait="_threshold"/>
+			<mul src="io()" trait="_DV+VS"/>
+			<max>0</max>
+		</alpha>
+		<systemcolor>0</systemcolor>
+	</image>
+
+	<image name="vignette_red">
+		<visible> <copy src="io()" trait="_DV+PB"/> <eq> 0 </eq> </visible>
+		<filename> Stentorious\Interface\vignette_drown_red.dds </filename>
+		<depth>-2</depth>
+		<width><copy src="screen()" trait="width"/><add>20</add></width>
+		<height><copy src="screen()" trait="height"/><add>20</add></height>
+		<zoom> &scale; </zoom>
+		<x>-10</x>
+		<y>-10</y>
+		<alpha> <copy src="io()" trait="_DV+AR"/> </alpha>
+		<systemcolor>0</systemcolor>
+	</image>
+
+</rect>
