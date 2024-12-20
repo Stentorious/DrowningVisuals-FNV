@@ -9,6 +9,7 @@
 
 ## Requirements
 - [JIP LN NVSE](https://www.nexusmods.com/newvegas/mods/58277)
+- [JohnnyGuitar NVSE](https://www.nexusmods.com/newvegas/mods/66927)
 - [User Interface Organizer](https://www.nexusmods.com/newvegas/mods/57174)
 - [lStewieAl's Tweaks](https://www.nexusmods.com/newvegas/mods/66347)
 
