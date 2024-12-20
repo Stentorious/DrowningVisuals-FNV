@@ -1,4 +1,4 @@
-; Drowning Visuals 1.9 - Stentorious
+; Drowning Visuals - Stentorious
 
 ; On Game Restart
 if Goo1.AuxVarGetFlt "*DrownVis_Init" != 1
