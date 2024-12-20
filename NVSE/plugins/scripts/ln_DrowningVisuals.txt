@@ -1,29 +1,40 @@
-; Drowning Visuals 1.8 - Stentorious
-
-; Check for requirements
-if GetPluginVersion "lStewieAl's Tweaks" < 906
-	MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest lStewieAl's Tweaks."
-	return
-endif
+; Drowning Visuals 1.9 - Stentorious
 
 ; On Game Restart
-if Goo1.AuxVarGetFlt "*DrownVisInit" != 1
-	
-	SetUIFloatAlt "HudMainMenu\MUX_Air\visible" 0 																							; Hide M.U.X. air if installed
-	SetUIFloatAlt "HudMainMenu\_DV+VS" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStrength" "DrowningVisuals.ini"))) * 255)	; Set Vignette strength
-	SetUIFloatAlt "HudMainMenu\_DV+VT" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStart" "DrowningVisuals.ini")))				; Set Vignette start threshold 
-	SetUIFloatAlt "HudMainMenu\_DV+BB" (GetGS fActorSwimBreathBase)																			; Set fActorSwimBreathBase
-	SetUIFloatAlt "HudMainMenu\_DV+BM" ((GetGS fActorSwimBreathMult) * 5)																	; Set fActorSwimBreathMult
-	SetUIFloatGradual "HudMainMenu\_DV+AR" 51 (GetUIFloatAlt "HudMainMenu\_DV+VS") 1 2														; Set red vignette alpha pulse
-	
-	SetOnMenuCloseEventHandler ({int stL1} => player.DamageActorValue Endurance 0) 1 1048													; Update breath amount on level up
-	SetOnMenuCloseEventHandler ({int stL1} => player.DamageActorValue Endurance 0) 1 1074													; Update breath amount on character creation
-	SetGameMainLoopCallback (begin Function {}
-		SetUIFloatAlt "HudMainMenu\_DV+PE" (player.GetAV Endurance)																			; Update Endurance
-		SetUIFloatAlt "HudMainMenu\_DV+PB" (player.GetActorDiveBreath)																		; Update Dive Breath						
-	end) 1 3 1
-	
-	Goo1.AuxVarSetFlt "*DrownVisInit" 1
-	
+if Goo1.AuxVarGetFlt "*DrownVis_Init" != 1
+	Goo1.AuxVarSetFlt "*DrownVis_Init" 1
+
+	; Check for requirements
+	if GetPluginVersion "lStewieAl's Tweaks" < 906
+		MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest lStewieAl's Tweaks."
+		return
+	endif
+	if GetPluginVersion "JohnnyGuitarNVSE" < 508
+		MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
+		return
+	endif
+	if GetPluginVersion "UI Organizer Plugin" < 230
+		MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest User Interface Organizer plugin."
+		return
+	endif
+
+	; Disable M.U.X. air
+	SetUIFloatAlt "HUDMainMenu\MUX_Air\visible" 0
+
+	; Load INI settings
+	SetUIFloatAlt "HUDMainMenu\_DV+VS" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStrength" "DrowningVisuals.ini"))) * 255)
+	SetUIFloatAlt "HUDMainMenu\_DV+VT" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStart" "DrowningVisuals.ini")))
+	SetUIFloatGradual "HUDMainMenu\_DV+AR" 51 (GetUIFloatAlt "HUDMainMenu\_DV+VS") 1 2
+
+	; LevelUpMenu/CharGenMenu fix
+	SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1048
+	SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1074
+
+	; Update player stats
+	SetOnActorValueChangeEventHandler 1 ({int iAVCode, float fOldValue, float fNewValue} => SetUIFloatAlt "HUDMainMenu\_DV+PE" (Player.GetAV Endurance)) 0 7
+	SetGameMainLoopCallback ({} => SetUIFloatAlt "HUDMainMenu\_DV+PB" (Player.GetActorDiveBreath)) 1 3 1
+
 endif
 
+; Update endurance on game load
+SetUIFloatAlt "HUDMainMenu\_DV+PE" (Player.GetAV Endurance)
