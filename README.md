@@ -8,8 +8,8 @@
 - Configurable via the included DrowningVisuals.ini.
 
 ## Requirements
-- [xNVSE](https://www.nexusmods.com/newvegas/mods/67883) (6.3.3+)
 - [JIP LN NVSE](https://www.nexusmods.com/newvegas/mods/58277)
+- [User Interface Organizer](https://www.nexusmods.com/newvegas/mods/57174)
 - [lStewieAl's Tweaks](https://www.nexusmods.com/newvegas/mods/66347)
 
 ## Installation
