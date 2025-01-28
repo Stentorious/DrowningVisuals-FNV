@@ -1,45 +1,43 @@
-<_DV+AR> 0 </_DV+AR>
-<_DV+VS> 255 </_DV+VS>
-<_DV+VT> 1 </_DV+VT>
-<_DV+BB> &-fActorSwimBreathBase; </_DV+BB>
-<_DV+BM>
-	<copy> &-fActorSwimBreathMult; </copy>
-	<mul> 5 </mul>
-</_DV+BM>
-<_DV+PB> 10 </_DV+PB>
-<_DV+PE> 5 </_DV+PE>
-
 <rect name="DrowningVisuals">
 
-	<_threshold>
-		<copy src="io()" trait="_DV+BB"/>
+	<_AlphaPulse> 0 </_AlphaPulse>
+	<_VignetteStrength> 255 </_VignetteStrength>
+	<_VignetteStart> 1 </_VignetteStart>
+	<_Endurance> 5 </_Endurance>
+	<_Breath> 10 </_Breath>
+	<_BreathMul>
+		<copy> &-fActorSwimBreathMult; </copy>
+		<mul> 5 </mul>
+	</_BreathMul>
+	<_Threshold>
+		<copy> &-fActorSwimBreathBase; </copy>
 		<add>
-			<copy src="io()" trait="_DV+BM"/>
+			<copy src="me()" trait="_BreathMul"/>
 			<onlyif>
-				<copy src="io()" trait="_DV+PE"/>
+				<copy src="me()" trait="_Endurance"/>
 				<gt> 5 </gt>
 			</onlyif>
 		</add>
 		<add>
-			<copy src="io()" trait="_DV+BM"/>
+			<copy src="me()" trait="_BreathMul"/>
 			<onlyif>
-				<copy src="io()" trait="_DV+PE"/>
+				<copy src="io()" trait="_Endurance"/>
 				<gt> 8 </gt>
 			</onlyif>
 		</add>
-		<mul src="io()" trait="_DV+VT"/>
-	</_threshold>
+		<mul src="me()" trait="_VignetteStart"/>
+	</_Threshold>
 
 	<image name="Vignette">
 		<visible>
-			<copy src="io()" trait="_DV+PB"/>
-			<lt src="parent()" trait="_threshold"/>
+			<copy src="parent()" trait="_Breath"/>
+			<lt src="parent()" trait="_Threshold"/>
 		</visible>
 		<alpha>
-			<copy src="parent()" trait="_threshold"/>
-			<sub src="io()" trait="_DV+PB"/>
-			<div src="parent()" trait="_threshold"/>
-			<mul src="io()" trait="_DV+VS"/>
+			<copy src="parent()" trait="_Threshold"/>
+			<sub src="parent()" trait="_Breath"/>
+			<div src="parent()" trait="_Threshold"/>
+			<mul src="parent()" trait="_VignetteStrength"/>
 			<max> 0 </max>
 		</alpha>
 		<depth> -3 </depth>
@@ -63,10 +61,10 @@
 
 	<image name="VignetteRed">
 		<visible>
-			<copy src="io()" trait="_DV+PB"/>
+			<copy src="parent()" trait="_Breath"/>
 			<eq> 0 </eq>
 		</visible>
-		<alpha> <copy src="io()" trait="_DV+AR"/> </alpha>
+		<alpha> <copy src="parent()" trait="_AlphaPulse"/> </alpha>
 		<x> -10 </x>
 		<y> -10 </y>
 		<depth> -2 </depth>
