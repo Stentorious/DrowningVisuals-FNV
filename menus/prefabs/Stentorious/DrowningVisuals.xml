@@ -59,7 +59,7 @@
 		<filename> Interface\Stentorious\DrowningVisuals\vignette.dds </filename>
 	</image>
 
-	<image name="VignetteRed">
+	<image name="VignetteDrown">
 		<visible>
 			<copy src="parent()" trait="_Breath"/>
 			<eq> 0 </eq>

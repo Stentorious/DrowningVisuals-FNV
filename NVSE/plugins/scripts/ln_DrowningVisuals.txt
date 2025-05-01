@@ -26,6 +26,27 @@ if Goo1.AuxVarGetFlt "*DrownVis_Init" != 1
 	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStart" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStart" "Stentorious\DrowningVisuals.ini")))
 	SetUIFloatGradual "HUDMainMenu\DrowningVisuals\_AlphaPulse" 51 (GetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStrength") 1 2
 
+	; Set vignette color
+	string_var sINI = GetINIString "Color:sDefault" "Stentorious\DrowningVisuals.ini"
+	int iLength = Sv_Length sINI
+	if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\red" (ToNumber (sINI[0:1]) 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\green" (ToNumber (sINI[2:3]) 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\blue" (ToNumber (sINI[4:5]) 1)
+	elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\systemcolor" (ToNumber sINI)
+	endif
+	sINI = GetINIString "Color:sDrowning" "Stentorious\DrowningVisuals.ini"
+	iLength = Sv_Length sINI
+	if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\red" (ToNumber (sINI[0:1]) 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\green" (ToNumber (sINI[2:3]) 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\blue" (ToNumber (sINI[4:5]) 1)
+	elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
+		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\systemcolor" (ToNumber sINI)
+	endif
+	Sv_Destruct sINI
+
 	; LevelUpMenu/CharGenMenu fix
 	SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1048
 	SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1074
