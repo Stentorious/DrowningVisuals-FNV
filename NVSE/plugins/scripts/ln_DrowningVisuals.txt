@@ -1,61 +1,61 @@
 ; Drowning Visuals - Stentorious
 
-; On Game Restart
-if Goo1.AuxVarGetFlt "*DrownVis_Init" != 1
-	Goo1.AuxVarSetFlt "*DrownVis_Init" 1
-
-	; Check for requirements
-	if GetPluginVersion "JohnnyGuitarNVSE" < 508
-		MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
-		return
-	endif
-	if GetPluginVersion "UI Organizer Plugin" < 230
-		MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest User Interface Organizer plugin."
-		return
-	endif
-	if GetPluginVersion "lStewieAl's Tweaks" < 906
-		MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest lStewieAl's Tweaks."
-		return
-	endif
-
-	; Disable M.U.X. air
-	SetUIFloatAlt "HUDMainMenu\MUX_Air\visible" 0
-
-	; Load INI settings
-	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStrength" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStrength" "Stentorious\DrowningVisuals.ini"))) * 255)
-	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStart" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStart" "Stentorious\DrowningVisuals.ini")))
-	SetUIFloatGradual "HUDMainMenu\DrowningVisuals\_AlphaPulse" 51 (GetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStrength") 1 2
-
-	; Set vignette color
-	string_var sINI = GetINIString "Color:sDefault" "Stentorious\DrowningVisuals.ini"
-	int iLength = Sv_Length sINI
-	if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\red" (ToNumber (sINI[0:1]) 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\green" (ToNumber (sINI[2:3]) 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\blue" (ToNumber (sINI[4:5]) 1)
-	elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\systemcolor" (ToNumber sINI)
-	endif
-	sINI = GetINIString "Color:sDrowning" "Stentorious\DrowningVisuals.ini"
-	iLength = Sv_Length sINI
-	if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\red" (ToNumber (sINI[0:1]) 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\green" (ToNumber (sINI[2:3]) 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\blue" (ToNumber (sINI[4:5]) 1)
-	elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-		SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\systemcolor" (ToNumber sINI)
-	endif
-	Sv_Destruct sINI
-
-	; LevelUpMenu/CharGenMenu fix
-	SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1048
-	SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1074
-
-	; Update player stats
-	SetOnActorValueChangeEventHandler 1 ({int iAVCode, float fOldValue, float fNewValue} => SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_Endurance" (Player.GetAV Endurance)) 0 7
-	SetGameMainLoopCallback ({} => SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_Breath" (Player.GetActorDiveBreath)) 1 3 1
-
-endif
-
 ; Update endurance on game load
 SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_Endurance" (Player.GetAV Endurance)
+
+; On Game Restart
+if eval Goo1.AuxVarGetFlt "*DrownVis_Init"
+	return
+endif
+Goo1.AuxVarSetFlt "*DrownVis_Init" 1
+
+; Check for requirements
+if GetPluginVersion "JohnnyGuitarNVSE" < 508
+	MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
+	return
+endif
+if GetPluginVersion "UI Organizer Plugin" < 230
+	MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest User Interface Organizer plugin."
+	return
+endif
+if GetPluginVersion "lStewieAl's Tweaks" < 906
+	MessageBoxEx "Drowning Visuals missing requirement!%rInstall latest lStewieAl's Tweaks."
+	return
+endif
+
+; Disable M.U.X. air
+SetUIFloatAlt "HUDMainMenu\MUX_Air\visible" 0
+
+; Load INI settings
+SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStrength" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStrength" "Stentorious\DrowningVisuals.ini"))) * 255)
+SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStart" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fVignetteStart" "Stentorious\DrowningVisuals.ini")))
+SetUIFloatGradual "HUDMainMenu\DrowningVisuals\_AlphaPulse" 51 (GetUIFloatAlt "HUDMainMenu\DrowningVisuals\_VignetteStrength") 1 2
+
+; Set vignette color
+string_var sINI = GetINIString "Color:sDefault" "Stentorious\DrowningVisuals.ini"
+int iLength = Sv_Length sINI
+if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\red" (ToNumber (sINI[0:1]) 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\green" (ToNumber (sINI[2:3]) 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\blue" (ToNumber (sINI[4:5]) 1)
+elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\Vignette\systemcolor" (ToNumber sINI)
+endif
+sINI = GetINIString "Color:sDrowning" "Stentorious\DrowningVisuals.ini"
+iLength = Sv_Length sINI
+if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\red" (ToNumber (sINI[0:1]) 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\green" (ToNumber (sINI[2:3]) 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\blue" (ToNumber (sINI[4:5]) 1)
+elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
+	SetUIFloatAlt "HUDMainMenu\DrowningVisuals\VignetteDrown\systemcolor" (ToNumber sINI)
+endif
+Sv_Destruct sINI
+
+; LevelUpMenu/CharGenMenu fix
+SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1048
+SetOnMenuCloseEventHandler ({int iMenuID} => Player.DamageAV Endurance 0) 1 1074
+
+; Update player stats
+SetOnActorValueChangeEventHandler 1 ({int iAVCode, float fOldValue, float fNewValue} => SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_Endurance" (Player.GetAV Endurance)) 0 7
+SetGameMainLoopCallback ({} => SetUIFloatAlt "HUDMainMenu\DrowningVisuals\_Breath" (Player.GetActorDiveBreath)) 1 3 1
